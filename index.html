@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Отмененные проверки на этапе «авторизация»</title>
+<style>
+  :root { --bg: linear-gradient(135deg,#f8fbff 0%,#f3fff7 100%); --card-bg:#fff; --text:#1b1f23; --muted:#5a6470; --accent:#2b7fff; --shadow:0 10px 30px rgba(0,0,0,.08); --radius:16px; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--text); background:var(--bg); }
+  header { padding:24px clamp(16px,5vw,48px); }
+  .title { font-size:clamp(20px,2.4vw,32px); font-weight:800; letter-spacing:-.02em; }
+  .subtitle { margin-top:6px; color:var(--muted); font-size:clamp(13px,1.4vw,16px); }
+  main { padding:8px clamp(16px,5vw,48px) 48px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+  .card { background:var(--card-bg); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:12px; transition:.2s; }
+  .card:hover { transform:translateY(-2px); box-shadow:0 12px 34px rgba(0,0,0,.10); }
+  .stage { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#0f172a; }
+  .substage { font-size:15px; color:var(--muted); }
+  .metrics { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .metric { background:#f6f9ff; border:1px solid #e7eefc; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:6px; }
+  .metric.secondary { background:#f7fff9; border-color:#e4f6ea; }
+  .label { font-size:12px; color:var(--muted); }
+  .value { font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+  .clickable { cursor:pointer; color:var(--accent); text-decoration:none; }
+  .footer-note { margin-top:6px; font-size:12px; color:var(--muted); }
+  .modal-backdrop { position:fixed; inset:0; background:rgba(15,23,42,.35); display:none; align-items:center; justify-content:center; z-index:1000; padding:clamp(8px,4vw,24px); }
+  .modal-backdrop.open { display:flex; }
+  .modal { background:#fff; width:min(100%,960px); border-radius:18px; box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; max-height:85vh; }
+  .modal-header { padding:16px 18px; border-bottom:1px solid #eef2f7; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .modal-title { font-weight:800; letter-spacing:-.01em; }
+  .modal-subtitle { color:var(--muted); font-size:13px; }
+  .modal-body { padding:0 18px 18px; overflow:auto; }
+  table { width:100%; border-collapse:separate; border-spacing:0; margin-top:12px; border:1px solid #eef2f7; border-radius:12px; overflow:hidden; }
+  thead th { position:sticky; top:0; background:#f8fafc; border-bottom:1px solid #eef2f7; padding:10px; text-align:left; font-size:13px; }
+  tbody td { border-bottom:1px solid #f1f5f9; padding:10px; vertical-align:top; font-size:14px; }
+  tbody tr:last-child td { border-bottom:none; }
+  .modal-footer { border-top:1px solid #eef2f7; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; background:#0ea5e9; color:#fff; font-weight:700; cursor:pointer; }
+  .btn.secondary { background:#e2e8f0; color:#0f172a; font-weight:600; }
+  .src-note { font-size:12px; color:#64748b; }
+  @media (max-width:560px) { .metrics { grid-template-columns:1fr; } .value { font-size:24px; } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="title">Отмененные проверки на этапе «авторизация»</div>
+    <div class="subtitle">Нажмите на число «Кол-во документов, которых коснулась отмена», чтобы увидеть подробности.</div>
+  </header>
+  <main><section class="grid" id="cards"></section></main>
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div><div class="modal-title" id="modalTitle"></div><div class="modal-subtitle" id="modalSubtitle"></div></div>
+        <button class="btn secondary" id="closeBtn" type="button">Закрыть</button>
+      </div>
+      <div class="modal-body">
+        <div class="src-note" id="sourceNote"></div>
+        <table id="detailsTable" aria-live="polite">
+          <thead><tr id="theadRow"></tr></thead>
+          <tbody id="tbodyRows"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <span class="src-note">Подсказка: прокручивайте таблицу, если она длинная.</span>
+        <button class="btn secondary" id="closeBtn2" type="button">Понятно</button>
+      </div>
+    </div>
+  </div>
+  <script id="app-data" type="application/json">{"title": "Отмененные проверки на этапе «авторизация»", "items": [{"id": "row_0", "stage": "Проверка комплектности и корректности подписанной КОД", "substage": "Корректность подписанных и предоставленных документов на этап сделки", "affected_docs_count": 6, "cancelled_zones_count": 16, "nav_id": "1001", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["КОД (КД, ЗОА, ЗПДС) ", "наличие в КД собственноручно проставленных отметок в чек-боксах"], ["КОД (КД, ЗОА, ЗПДС) ", "наличие в КД машинописных отметок в чек-боксах"], ["КОД (КД, ЗОА, ЗПДС) ", "нумерация, полнота документа"], ["КОД (КД, ЗОА, ЗПДС) ", "сшив договоров (при необходимости)"], ["КД по ИЖС, дата подписания с 01.03.25", "Доп. контроль по сделкам ИЖС/ИЖС с одновременным приобретением ЗУ при расчетах по счету эскроу:\n- в КД п.12 дата договора подряда (при наличие) в п.12 КД"], ["Форма подтверждения заемщика (если КД подписан ЭЦП) по госпрограммам", "По продуктам Ипотечная программа для ИТ специалистов», Дальневосточная и арктическая ипотека» для категорий «Работник ОПК» и «Сотрудник медицинской или образовательной организации» -подпись (осн. заёмщика)\n2. По продуктам «Льготная ипотека в Курской области»,  «Льготная ипотека в Белгородской области» - подпись всех заемщиков, являющихся одновременно залогодателями\n3. По продуктам «Семейная ипотека с государственной поддержкой», «Семейная ипотека для военнослужащих» - подпись всех заемщиков"], ["Документ об оплате страхования", "сумма"], ["Документ об оплате страхования", "номер полиса"], ["Документ об оплате страхования", "наименование получателя/страховой компании "], ["Договор счета эскроу (в том числе в виде заявления об открытиеии счета эскоу), за исключением счета эскроу в Банке ДОМ.РФ\"", "наличие документа"], ["Договор счета эскроу (в том числе в виде заявления об открытиеии счета эскоу), за исключением счета эскроу в Банке ДОМ.РФ\"", "ФИО (без паспортных данных)"], ["Договор счета эскроу (в том числе в виде заявления об открытиеии счета эскоу), за исключением счета эскроу в Банке ДОМ.РФ\"", "номер договора приобретения /или реквизиты (наименование и ИНН) застройщика либо\nсумма/или адрес объекта"], ["Договор счета эскроу (в том числе в виде заявления об открытиеии счета эскоу), за исключением счета эскроу в Банке ДОМ.РФ\"", "отметки депонента/банка (при необходимости)"], ["Доп. контроль по сделкам по схеме \"Кредит до МСК\":\n- Заявление о присоединении к \"Условиям открытия, обслуживания и закрытия залогового счета в АО \"Банк ДОМ.РФ\"\n- Договор залога прав по договору залоговога счета", "наличие"], ["Доп. контроль по сделкам по схеме \"Кредит до МСК\":\n- Заявление о присоединении к \"Условиям открытия, обслуживания и закрытия залогового счета в АО \"Банк ДОМ.РФ\"\n- Договор залога прав по договору залоговога счета", "ФИО (без паспортных данных)"], ["Доп. контроль по сделкам по схеме \"Кредит до МСК\":\n- Заявление о присоединении к \"Условиям открытия, обслуживания и закрытия залогового счета в АО \"Банк ДОМ.РФ\"\n- Договор залога прав по договору залоговога счета", "подпись"]], "details_source": "1001.xlsx"}, {"id": "row_1", "stage": "Проверка выполнений условий выдачи", "substage": "Контроль ПВ/комиссии", "affected_docs_count": 3, "cancelled_zones_count": 6, "nav_id": "1002", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["Оплата ПВ ", "назначение платежа: \n- наименование Договора приобретения\n- номер и дата Договора приобретения\n- адрес ПИ"], ["Оплата ПВ ", "и реквизиты Получателя"], ["Документ по оплате комиссий за применение опций/вычетов (при необходимости когда ФЛ)", "ФИО заемщика/плательщика"], ["Документ по оплате комиссий за применение опций/вычетов (при необходимости когда ФЛ)", "сумма комиссии"], ["Подтверждение целевого использования (ИЖС хозспособ)", "за исключением ИЖС хозспособ  \"Кредитная линия\""], ["Подтверждение целевого использования (ИЖС хозспособ)", "за исключением ИЖС хозспособ  \"Кредитная линия\""]], "details_source": "1002.xlsx"}, {"id": "row_2", "stage": "Проверка комплектности и корректности зарегистрированных документов, контрольных полей АПИКС", "substage": "Приобретение/ИЖС с одновременным приобретением ЗУ", "affected_docs_count": 2, "cancelled_zones_count": 6, "nav_id": "1003", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["Договор приобретения ", "взаиморасчеты по сделке (за исключением опции \"ПДКП\") - только для ДКП (готовая недвижимость + ДКП земельного участка)/ДП (ИЖС)"], ["Договор приобретения ", "адрес предмета ипотеки, только для ДКП (готовая недвижимость + ДКП земельного участка)/ДП (ИЖС)"], ["Договор приобретения ", "Доп. контроль по сделкам по схеме \"Кредит до МСК\":\n- проверка в договоре приобретения/договоре подряда номера залогового счета, открытого в Банке, в качестве счета для возврата денежных средств при расторжении."], ["Договор приобретения ", "заявления депонента и бенефициара  визуальная проверка"], ["Выписка ЕГРН", "ИНН/ОГРН Банка"], ["Выписка ЕГРН", "наименование, номер и дата документа основания в Выписке ЕГРН"]], "details_source": "1003.xlsx"}, {"id": "row_3", "stage": "Проверка комплектности и корректности зарегистрированных документов, контрольных полей АПИКС", "substage": "ИЖС/ИЖС с одновременным приобретением ЗУ расчеты через счет эскроу\n(условия раскрытия счета эскроу)", "affected_docs_count": 1, "cancelled_zones_count": 4, "nav_id": "1004", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["КД  по  ИЖС, до 01.03.2025:\nзаявления Депонента (Заказщика) об открытиеии счета эскоу\nзаявления Бенефициара (Подрядчика) об открытиеии счета эскоу\n по счетам эскроу в Банке ДОМ.РФ\"", "ФИО (без паспортных данных)"], ["КД  по  ИЖС, до 01.03.2025:\nзаявления Депонента (Заказщика) об открытиеии счета эскоу\nзаявления Бенефициара (Подрядчика) об открытиеии счета эскоу\n по счетам эскроу в Банке ДОМ.РФ\"", "номер договора приобретения (при наличие) /или реквизиты (наименование и ИНН) застройщика либо\n сумма/или адрес объекта"], ["КД  по  ИЖС, до 01.03.2025:\nзаявления Депонента (Заказщика) об открытиеии счета эскоу\nзаявления Бенефициара (Подрядчика) об открытиеии счета эскоу\n по счетам эскроу в Банке ДОМ.РФ\"", "проверка варианта расчетов/суммы (депонируемой) для перечисления: 100% или 80-20% \nвариант расчетов должен быть идентичен в обоих заявлениях"], ["КД  по  ИЖС, до 01.03.2025:\nзаявления Депонента (Заказщика) об открытиеии счета эскоу\nзаявления Бенефициара (Подрядчика) об открытиеии счета эскоу\n по счетам эскроу в Банке ДОМ.РФ\"", "отметки депонента/банка (при необходимости)"]], "details_source": "1004.xlsx"}, {"id": "row_4", "stage": "Условия выдачи", "substage": "Контроль ПВ/субсидий/комиссии", "affected_docs_count": 1, "cancelled_zones_count": 2, "nav_id": "1005", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["Оплата ПВ ", "назначение платежа (при оплате ПВ): \n- наименование Договора приобретения\n- номер и дата Договора приобретения\n- адрес ПИ"], ["Оплата ПВ ", "реквизиты Получателя"]], "details_source": "1005.xlsx"}, {"id": "row_5", "stage": "Проверка комплектности и корректности подписанной КОД", "substage": "Комплектность подписанных и предоставленных документов на этап сделки", "affected_docs_count": 1, "cancelled_zones_count": 1, "nav_id": "1006", "details_headers": ["Документов, которых коснулась отмена", "Отмененная проверка"], "details_rows": [["Документ об оплате страховой премии", "Качество сканирования документа"]], "details_source": "1006.xlsx"}]}</script>
+  <script>
+  (function() {
+    const data = JSON.parse(document.getElementById('app-data').textContent || '{}');
+    const cardsEl = document.getElementById('cards');
+    function escapeHtml(str) { return String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+    function card(item) {
+      const el = document.createElement('article');
+      el.className = 'card';
+      el.innerHTML = `
+        <div class="stage">${escapeHtml(item.stage)}</div>
+        <div class="substage">${escapeHtml(item.substage)}</div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="label">Кол-во документов, которых коснулась отмена</div>
+            <div class="value"><a href="#" class="clickable" data-id="${item.id}">${Number(item.affected_docs_count||0)}</a></div>
+          </div>
+          <div class="metric secondary">
+            <div class="label">Кол-во отменённых зон проверок</div>
+            <div class="value">${Number(item.cancelled_zones_count||0)}</div>
+          </div>
+        </div>
+        <div class="footer-note">Навигация: ${escapeHtml(item.nav_id||'')}</div>`;
+      return el;
+    }
+    function render() {
+      const frag = document.createDocumentFragment();
+      (data.items||[]).forEach(it => frag.appendChild(card(it)));
+      cardsEl.innerHTML = ''; cardsEl.appendChild(frag);
+      cardsEl.querySelectorAll('a.clickable').forEach(a => a.addEventListener('click', e => {
+        e.preventDefault();
+        const id = a.getAttribute('data-id');
+        const it = (data.items||[]).find(x => x.id===id);
+        if (it) openModal(it);
+      }));
+    }
+    // modal
+    const backdrop = document.getElementById('modalBackdrop');
+    const closeBtn = document.getElementById('closeBtn');
+    const closeBtn2 = document.getElementById('closeBtn2');
+    const titleEl = document.getElementById('modalTitle');
+    const subEl = document.getElementById('modalSubtitle');
+    const srcEl = document.getElementById('sourceNote');
+    const theadRow = document.getElementById('theadRow');
+    const tbodyRows = document.getElementById('tbodyRows');
+    function openModal(item) {
+      titleEl.textContent = item.stage||'';
+      subEl.textContent = item.substage||'';
+      srcEl.textContent = item.details_source?('Источник: '+item.details_source):'';
+      theadRow.innerHTML=''; tbodyRows.innerHTML='';
+      const headers = Array.isArray(item.details_headers)&&item.details_headers.length? item.details_headers : ['Данные'];
+      headers.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; theadRow.appendChild(th); });
+      const rows = Array.isArray(item.details_rows)? item.details_rows: [];
+      if (rows.length) {
+        rows.forEach(r=>{ const tr=document.createElement('tr'); if(Array.isArray(r)) r.forEach(c=>{ const td=document.createElement('td'); td.textContent=String(c??''); tr.appendChild(td); }); else { const td=document.createElement('td'); td.textContent=JSON.stringify(r); tr.appendChild(td); } tbodyRows.appendChild(tr); });
+      } else {
+        const tr=document.createElement('tr'); const td=document.createElement('td'); td.colSpan=headers.length; td.textContent='Нет данных для отображения.'; tr.appendChild(td); tbodyRows.appendChild(tr);
+      }
+      backdrop.classList.add('open'); backdrop.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+    }
+    function closeModal() { backdrop.classList.remove('open'); backdrop.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    closeBtn.addEventListener('click', closeModal); closeBtn2.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', e=>{ if(e.target===backdrop) closeModal(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+    render();
+  })();
+  </script>
+</body>
+</html>
